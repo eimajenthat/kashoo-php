@@ -30,8 +30,17 @@ $invoiceJson = '  {
 $invoiceJson = sprintf($invoiceJson, $kashoo->businessId);
 //die($invoiceJson);
 
-$kashoo->createInvoice($invoiceJson);
-//$kashoo->listInvoices();
-//$kashoo->listRecords();
+//$kashoo->createInvoice($invoiceJson);
+
+$kashoo->listContacts();
+$kashoo->listCustomers();
+$kashoo->listVendors();
+
+$kashoo->listAccounts();
+
+
+$kashoo->listRecords();
+$kashoo->listInvoices();
+$kashoo->listBills();
 
 echo "\n";

@@ -46,7 +46,7 @@ class Kashoo {
 	}
 
 	
-	public function createInvoice ($invoice, $businessId = null) {
+	public function createInvoice($invoice, $businessId = null) {
 		if(is_null($businessId)){
 			$businessId = $this->businessId;
 		}
@@ -62,46 +62,90 @@ class Kashoo {
 		return true;
 	}
 
-	public function listInvoices($startDate = null, $endDate = null, $businessId = null) {
+	public function listRecords($type = null, $startDate = null, $endDate = null, $businessId = null, $limit = 100, $offset = 0) {
 		// Clean up parameters
 		$businessId = is_null($businessId) ? $this->businessId : $businessId;
 		$startDate = is_null($startDate) ? date('Y-m-d', 0) : $startDate;
 		$startDate = is_int($startDate) ? date('Y-m-d', $startDate) : $startDate;
 		$endDate = is_null($endDate) ? date('Y-m-d') : $endDate;
-		$endDate = is_null($endDate) ? date('Y-m-d', $endDate) : $endDate;
+		$endDate = is_int($endDate) ? date('Y-m-d', $endDate) : $endDate;
 
-		$invoices = $this->httpRequest(
+		$records = $this->httpRequest(
 			sprintf(
-				'/businesses/%s/records/invoices',
-				$businessId
+				'/businesses/%s/records/%s',
+				$businessId,
+				$type
 			),
 			array(
 				'startDate' => $startDate,
 				'endDate' => $endDate,
+				'limit' => $limit,
+				'offset' => $offset,
 			),
 			'get',
 			'json'
 		);
-		return $invoices;
+		return $records;
 	}
 
-	public function listRecords($startDate = null, $endDate = null, $businessId = null, $limit = 100) {
+	public function listInvoices($type = null, $startDate = null, $endDate = null, $businessId = null, $limit = 100, $offset = 0) {
+		return $this->listRecords('invoices', $startDate, $endDate, $businessId, $limit, $offset);
+	}
+
+	public function listBills($type = null, $startDate = null, $endDate = null, $businessId = null, $limit = 100, $offset = 0) {
+		return $this->listRecords('bills', $startDate, $endDate, $businessId, $limit, $offset);
+	}
+
+	public function listContacts($type = '', $businessId = null, $limit = 100) {
+		$businessId = is_null($businessId) ? $this->businessId : $businessId;
+		$sync = $this->httpRequest(
+			'/sync',
+			array(
+				'business' => $businessId,
+				'description' => 'temporary sync session to request contacts',
+			),
+			'post',
+			'json',
+			null,
+			'raw'
+		);
+
+		$contacts = $this->httpRequest(
+			sprintf(
+				'/sync/%s/contacts/%s',
+				$sync['id'],
+				$type
+			),
+			array(
+				'limit' => 100,
+			),
+			'get',
+			'json'
+		);
+		return $contacts;
+	}
+
+	public function listVendors($businessId = null, $limit = 100){
+		return $this->listContacts('vendors', $businessId, $limit);
+	}
+
+	public function listCustomers($businessId = null, $limit = 100){
+		return $this->listContacts('customers', $businessId, $limit);
+	}
+
+	public function listAccounts($type = null, $businessId = null, $limit = 100, $offset = 0) {
 		// Clean up parameters
 		$businessId = is_null($businessId) ? $this->businessId : $businessId;
-		$startDate = is_null($startDate) ? date('Y-m-d', 0) : $startDate;
-		$startDate = is_int($startDate) ? date('Y-m-d', $startDate) : $startDate;
-		$endDate = is_null($endDate) ? date('Y-m-d') : $endDate;
-		$endDate = is_null($endDate) ? date('Y-m-d', $endDate) : $endDate;
 
 		$invoices = $this->httpRequest(
 			sprintf(
-				'/businesses/%s/records',
+				'/businesses/%s/accounts',
 				$businessId
 			),
 			array(
-				'startDate' => $startDate,
-				'endDate' => $endDate,
-				'limit' => 100,
+				'type' => $type,
+				'limit' => $limit,
+				'offset' => $offset,
 			),
 			'get',
 			'json'
@@ -160,10 +204,11 @@ class Kashoo {
 		die();
 	}
 
-	private function httpRequest($end_point, $data = null, $method = 'post', $response_format = 'raw', $alt_url = ''){
+	private function httpRequest($end_point, $data = null, $method = 'post', $response_format = 'raw', $alt_url = '', $request_format = null){
 		$curl = curl_init();
 		$url = $alt_url ? $alt_url : self::$base_url;
 		$url .= $end_point;
+		$request_format = is_null($request_format) ? $response_format : $request_format;
 
 		// Add options based on on HTTP method
 		switch($method){
@@ -185,8 +230,8 @@ class Kashoo {
 		$http_header = array();
 		if($response_format != 'raw'){
 			$http_header[] = 'Accept: application/' . $response_format;
-			if($method == 'post'){
-				$http_header[] = 'Content-Type: application/' . $response_format;                                                     
+			if($method == 'post' && in_array($request_format, array('json','xml'))){
+				$http_header[] = 'Content-Type: application/' . $request_format;                                                     
 	    		//$http_header[] = 'Content-Length: '. strlen($data);
 			}
 		}
@@ -221,7 +266,7 @@ class Kashoo {
 			}
 			$http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 			if($http_code != 200){
-				echo 'ERROR: '.$http_code.' '.$this->lookupHTTPCode($http_code);
+				echo 'ERROR: '.$http_code.' '.$this->lookupHTTPCode($http_code)."\n";
 			}
 			echo "\n-------------------------------------------------------------------------------\n";
 			echo "\nREQUEST:\n";
