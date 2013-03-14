@@ -62,6 +62,38 @@ class Kashoo {
 		return true;
 	}
 
+	public function createAccount($account, $businessId = null){
+		if(is_null($businessId)){
+			$businessId = $this->businessId;
+		}
+		$this->httpRequest(
+			sprintf(
+				'/businesses/%s/accounts',
+				$businessId
+			),
+			$account,
+			'post',
+			'json'
+		);
+		return true;
+	}
+
+	public function createBill($bill, $businessId = null){
+		if(is_null($businessId)){
+			$businessId = $this->businessId;
+		}
+		$this->httpRequest(
+			sprintf(
+				'/businesses/%s/records/bills',
+				$businessId
+			),
+			$bill,
+			'post',
+			'json'
+		);
+		return true;
+	}
+
 	public function listRecords($type = null, $startDate = null, $endDate = null, $businessId = null, $limit = 100, $offset = 0) {
 		// Clean up parameters
 		$businessId = is_null($businessId) ? $this->businessId : $businessId;
@@ -249,7 +281,7 @@ class Kashoo {
 		curl_setopt($curl, CURLINFO_HEADER_OUT, true);
 		
 
-		if(DEBUG){
+		if(DEBUG === true){
 			echo "\n-------------------------------BEGIN-HTTP-DEBUG--------------------------------\n";
 			echo $url . "\n";
 			//curl_setopt($curl, CURLOPT_VERBOSE, true);
@@ -259,7 +291,7 @@ class Kashoo {
 		$header = substr($curl_response, 0, $header_size);
 		$body = substr($curl_response, $header_size);
 
-		if(DEBUG){
+		if(DEBUG === true){
 			echo "\n-------------------------------------------------------------------------------\n";
 			if(curl_error($curl)){
 				echo 'ERROR: '.curl_error($curl)."\n";
@@ -270,7 +302,7 @@ class Kashoo {
 			}
 			echo "\n-------------------------------------------------------------------------------\n";
 			echo "\nREQUEST:\n";
-			echo curl_getinfo($curl, CURLINFO_REQUEST_SIZE);
+			//echo curl_getinfo($curl, CURLINFO_REQUEST_SIZE);
 			echo curl_getinfo($curl, CURLINFO_HEADER_OUT);
 
 			echo "\n-------------------------------------------------------------------------------\n";

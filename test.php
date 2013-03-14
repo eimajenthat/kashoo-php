@@ -14,7 +14,7 @@ $kashoo->businessId = $my_businesses[0]['id'];
 
 $invoiceJson = '  {
     "currency" : "USD",
-    "dueDate" : "2013-01-21",
+    "dueDate" : "%s",
     "lineItems" : [
       {
         "account" : 9997419979,
@@ -24,23 +24,59 @@ $invoiceJson = '  {
       }
     ],
     "type" : "invoice",
-    "date" : "2013-01-21",
+    "date" : "%s",
     "poNumber" : ""
   }';
-$invoiceJson = sprintf($invoiceJson, $kashoo->businessId);
-//die($invoiceJson);
+$invoiceJson = sprintf(
+  $invoiceJson, 
+  date('Y-m-d'),
+  date('Y-m-d')
+);
 
-//$kashoo->createInvoice($invoiceJson);
+// $kashoo->createInvoice($invoiceJson);
 
 $kashoo->listContacts();
 $kashoo->listCustomers();
 $kashoo->listVendors();
 
-$kashoo->listAccounts();
 
 
 $kashoo->listRecords();
 $kashoo->listInvoices();
+
 $kashoo->listBills();
+$billJson = '  {
+    "currency" : "USD",
+    "dueDate" : "%s",
+    "lineItems" : [
+      {
+        "account" : 9997419972,
+        "quantity" : 1,
+        "rate" : 1,
+        "taxCode" : ""
+      }
+    ],
+    "type" : "bill",
+    "date" : "%s",
+    "poNumber" : ""
+  }';
+$billJson = sprintf(
+  $billJson, 
+  date('Y-m-d'),
+  date('Y-m-d')
+);
+// $kashoo->createBill($billJson);
+
+$rand = rand();
+$accountJson = sprintf('{
+    "name":"random account name %s",
+    "number":%s,
+    "type":"CASH"
+  }',
+  $rand,
+  $rand
+);
+// $kashoo->createAccount($accountJson);
+$kashoo->listAccounts();
 
 echo "\n";
