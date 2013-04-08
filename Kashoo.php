@@ -94,6 +94,22 @@ class Kashoo {
 		return true;
 	}
 
+	public function createBillPayment($bill, $businessId = null){
+		if(is_null($businessId)){
+			$businessId = $this->businessId;
+		}
+		$this->httpRequest(
+			sprintf(
+				'/businesses/%s/records/billPayments',
+				$businessId
+			),
+			$bill,
+			'post',
+			'json'
+		);
+		return true;
+	}
+
 	public function listRecords($type = null, $startDate = null, $endDate = null, $businessId = null, $limit = 100, $offset = 0) {
 		// Clean up parameters
 		$businessId = is_null($businessId) ? $this->businessId : $businessId;
@@ -126,6 +142,10 @@ class Kashoo {
 
 	public function listBills($type = null, $startDate = null, $endDate = null, $businessId = null, $limit = 100, $offset = 0) {
 		return $this->listRecords('bills', $startDate, $endDate, $businessId, $limit, $offset);
+	}
+
+	public function listBillPayments($type = null, $startDate = null, $endDate = null, $businessId = null, $limit = 100, $offset = 0) {
+		return $this->listRecords('billPayments', $startDate, $endDate, $businessId, $limit, $offset);
 	}
 
 	public function listContacts($type = '', $businessId = null, $limit = 100) {

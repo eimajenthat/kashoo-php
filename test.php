@@ -17,7 +17,7 @@ $invoiceJson = '  {
     "dueDate" : "%s",
     "lineItems" : [
       {
-        "account" : 9997419979,
+        "account" : %s,
         "quantity" : 1,
         "rate" : 1,
         "taxCode" : ""
@@ -28,7 +28,8 @@ $invoiceJson = '  {
     "poNumber" : ""
   }';
 $invoiceJson = sprintf(
-  $invoiceJson, 
+  $invoiceJson,
+  '9997419979',         // ID for the account to pay to, I think, you'll need to use your own
   date('Y-m-d'),
   date('Y-m-d')
 );
@@ -39,8 +40,6 @@ $kashoo->listContacts();
 $kashoo->listCustomers();
 $kashoo->listVendors();
 
-
-
 $kashoo->listRecords();
 $kashoo->listInvoices();
 
@@ -50,7 +49,7 @@ $billJson = '  {
     "dueDate" : "%s",
     "lineItems" : [
       {
-        "account" : 9997419972,
+        "account" : %s,
         "quantity" : 1,
         "rate" : 1,
         "taxCode" : ""
@@ -61,7 +60,8 @@ $billJson = '  {
     "poNumber" : ""
   }';
 $billJson = sprintf(
-  $billJson, 
+  $billJson,
+  '9997419979',         // ID for the account to pay to, I think, you'll need to use your own 
   date('Y-m-d'),
   date('Y-m-d')
 );
@@ -79,4 +79,33 @@ $accountJson = sprintf('{
 // $kashoo->createAccount($accountJson);
 $kashoo->listAccounts();
 
+$billPaymentJson = '{
+      "type":"billPayment",
+      "account":%s,
+      "allocations":[
+         {
+            "amount":1,
+            "record":%s
+         }
+      ],
+      "amount":1,
+      "contact":%s,
+      "currency":"USD",
+      "date":"%s",
+      "unallocatedAmount":0
+   }';
+// Fill in your details, the ones below are for my test account 99.9% guaranteed NOT to work you
+$billPaymentJson = sprintf(
+  $billPaymentJson,
+  '9997419964',         //Account... I guess the account to pay from?
+  '11568679628',        //This is the ID of the Bill you're paying
+  '10033389321',        //Payment allocations must go to a record with the same contact
+  date('Y-m-d')
+);
+
+// $kashoo->createBillPayment($billPaymentJson);
+
+$kashoo->listBillPayments();
+
 echo "\n";
+
