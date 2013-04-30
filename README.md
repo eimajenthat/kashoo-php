@@ -9,19 +9,12 @@ I am not affiliated in any way with Kashoo Inc., although they seem like nice fo
 For API bugs: http://support.kashoo.com/
 For bugs with my library: https://github.com/eimajenthat/kashoo-php/issues
 
-Forking
--------
-This is GitHub, and this is open source software.  You are free to fork, use, and modify the code to your needs.  I would appreciate a pull request if you fix any bugs, or make any changes others might find useful.
-
-License
--------
-Copyright 2013 James Adams
-
-This software is licensed under the MIT license, which you can read here:
-
-[LICENSE](https://github.com/eimajenthat/kashoo-php/blob/master/LICENSE)
-
-This is the same license used by jQuery and a number of open source projects.  My understanding is that it should allow you to use, modify, distribute, or not distribute, the code in pretty much any way you see fit.  If you are in doubt about the license, feel free to contact me.
+Requirements
+------------
++ Curl
++ PHP
++ php-curl
++ a Kashoo account (free or paid)
 
 Usage
 -----
@@ -65,3 +58,18 @@ Links
 + https://www.kashoo.com/
 + http://support.kashoo.com/
 + https://api.kashoo.com/
+
+Forking
+-------
+This is GitHub, and this is open source software.  You are free to fork, use, and modify the code to your needs.  I would appreciate a pull request if you fix any bugs, or make any changes others might find useful.
+
+License
+-------
+Copyright 2013 James Adams
+
+This software is licensed under the MIT license, which you can read here:
+
+[LICENSE](https://github.com/eimajenthat/kashoo-php/blob/master/LICENSE)
+
+This is the same license used by jQuery and a number of open source projects.  My understanding is that it should allow you to use, modify, distribute, or not distribute, the code in pretty much any way you see fit.  If you are in doubt about the license, feel free to contact me.
+
