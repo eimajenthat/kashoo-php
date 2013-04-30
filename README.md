@@ -2,6 +2,13 @@ Kashoo-PHP
 ==========
 A PHP wrapper library to interact with the REST API for Kashoo Cloud Accounting
 
+Disclaimer
+----------
+I am not affiliated in any way with Kashoo Inc., although they seem like nice folks.  If you encounter a bug with this library, it's not their fault.  On the other hand, if you encounter a bug with their API, it's not my fault.  Please route any questions accordingly.
+
+For API bugs: http://support.kashoo.com/
+For bugs with my library: https://github.com/eimajenthat/kashoo-php/issues
+
 Forking
 -------
 This is GitHub, and this is open source software.  You are free to fork, use, and modify the code to your needs.  I would appreciate a pull request if you fix any bugs, or make any changes others might find useful.
@@ -52,3 +59,9 @@ The script is meant to be run from a command line.  In Linux or OSX, you can jus
 You specify your Kashoo email and password in the config.php file.  Should be pretty straight forward, just fill in the blanks.
 The test script has a DEBUG constant.  It's set to true, so get lots of interesting output.  For a production implementation, you would set it to true, or omit it.
 For testing, all three files should be in the same directory.  For integrating with your own app, you only need Kashoo.php, and can put it wherever you like.
+
+Links
+-----
+https://www.kashoo.com/
+http://support.kashoo.com/
+https://api.kashoo.com/
