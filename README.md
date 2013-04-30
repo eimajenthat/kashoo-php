@@ -7,6 +7,7 @@ Disclaimer
 I am not affiliated in any way with Kashoo Inc., although they seem like nice folks.  If you encounter a bug with this library, it's not their fault.  On the other hand, if you encounter a bug with their API, it's not my fault.  Please route any questions accordingly.
 
 For API bugs: http://support.kashoo.com/
+
 For bugs with my library: https://github.com/eimajenthat/kashoo-php/issues
 
 Requirements
